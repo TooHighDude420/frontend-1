@@ -63,8 +63,6 @@ async function getCoinData(Coin) {
         price,
     }));
 
-    console.log(formatted);
-
     return formatted
 }
 
@@ -100,8 +98,6 @@ async function finalMap() {
             casheMap.get(test.name).push({ "price": test.price, "time": test.time });
         }
     });
-
-    console.log("cashemap", casheMap);
 
     return casheMap;
 }

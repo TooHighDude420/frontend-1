@@ -6,8 +6,6 @@ function Card({ children, width, height }) {
             {children}
         </div>
     )
-
-
 }
 
 export default Card

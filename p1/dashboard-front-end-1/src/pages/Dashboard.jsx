@@ -5,6 +5,7 @@ import BallanceContent from "../components/BallanceContent"
 import WalletContent from "../components/WalletContent"
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 import { useState, useEffect } from "react"
+import Skeleton from "react-loading-skeleton"
 
 const mockData = [
   {
@@ -157,56 +158,74 @@ function say(content) {
   console.log(content);
 }
 
-function Dashboard({ favorites, wallet, cache }) {
-  const topthree = []
-  let timelist = [];
+function Dashboard({ favorites, wallet, cache, loading }) {
+  const [context, setContext] = useState({})
 
-  for (let thing of Object.keys(wallet)) {
-    if (topthree.length < 3) {
-      if (thing === "ballance") {
+  useEffect(() => {
+    if (!cache) return;
 
-      } else {
-        topthree.push({
-          "name": thing,
-          "value": cache.get(thing)
-        });
+    const topthree = [];
+    let combData = [];
+    let keyone = "";
+    let keytwo = "";
+    let keythee = "";
+    let timelist = [];
 
-        for (let obj of cache.get(thing)) {
-          timelist.push(obj.time);
+    for (let thing of Object.keys(wallet)) {
+      if (topthree.length < 3) {
+        if (thing === "ballance") {
+
+        } else {
+          topthree.push({
+            "name": thing,
+            "value": cache.get(thing)
+          });
+
+          for (let obj of cache.get(thing)) {
+            timelist.push(obj.time);
+          }
         }
       }
     }
-  }
 
-  timelist = new Set(timelist);
+    timelist = new Set(timelist);
 
-  let combData = [];
+    keyone = topthree[0].name
+    keytwo = topthree[1].name
+    keythee = topthree[2].name
 
-  const keyone = topthree[0].name
-  const keytwo = topthree[1].name
-  const keythee = topthree[2].name
+    for (let timestamp of timelist) {
+      let tmpbundle = [];
 
-
-  for (let timestamp of timelist) {
-    let tmpbundle = [];
-
-    topthree.forEach((element) => {
-      element.value.forEach(elm => {
-        if (elm.time == timestamp) {
-          tmpbundle.push({ "name": element.name, "value": elm.price })
-        }
+      topthree.forEach((element) => {
+        element.value.forEach(elm => {
+          if (elm.time == timestamp) {
+            tmpbundle.push({ "name": element.name, "value": elm.price })
+          }
+        });
       });
-    });
 
-    let tmpdata = {
-      "time": timestamp,
-      [keyone]: tmpbundle[0].value,
-      [keytwo]: tmpbundle[1].value,
-      [keythee]: tmpbundle[2].value
+      let tmpdata = {
+        "time": timestamp,
+        [keyone]: tmpbundle[0].value,
+        [keytwo]: tmpbundle[1].value,
+        [keythee]: tmpbundle[2].value
+      }
+      combData.push(tmpdata)
     }
 
-    combData.push(tmpdata)
-  }
+    setContext({
+      combData,
+      keyone,
+      keytwo,
+      keythee
+    });
+  }, [cache]);
+
+  let combData = context.combData;
+  let keyone = context.keyone;
+  let keytwo = context.keytwo;
+  let keythee = context.keythee;
 
   return (
     <div className="max-w-[85vw] min-w-[85vw] h-[90vh]">
@@ -227,27 +246,62 @@ function Dashboard({ favorites, wallet, cache }) {
           </Link>
         </div>
         <div className="flex overflow-x-scroll no-scrollbar">
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="bitcoin" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ethereum" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="tether" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="binancecoin" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="usd-coin" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ripple" cache={cache} />
-          </Card>
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="cardano" cache={cache} />
-          </Card>
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="bitcoin" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="ethereum" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="tether" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="binancecoin" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="usd-coin" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="ripple" cache={cache} />
+            </Card>
+          }
+          {loading
+            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <Skeleton count={1} width="33vw" height="20vh" />
+            </Card>
+            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
+              <CryptoContent coinName="cardano" cache={cache} />
+            </Card>
+          }
         </div>
       </div>
       {/* three most held coins on one graph */}

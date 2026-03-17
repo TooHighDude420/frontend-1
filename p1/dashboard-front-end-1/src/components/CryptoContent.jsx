@@ -25,7 +25,7 @@ export const choiseDict = {
     "vechain": "VET"
 }
 
-function CryptoContent({ coinName, time, setLoadedCoins, cache }) {
+function CryptoContent({ coinName, time, setLoadedCoins, cache, loading }) {
     let tmpitem = cache.get(coinName);
 
     let coinNameCap = coinName.replace(coinName.charAt(0), coinName.charAt(0).toLocaleUpperCase())

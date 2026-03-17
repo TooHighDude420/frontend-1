@@ -1,3 +1,4 @@
+import Skeleton from "react-loading-skeleton";
 import Card from "../components/Card"
 import CryptoContent from "../components/CryptoContent";
 
@@ -24,16 +25,23 @@ const choiseDict = [
     "vechain"
 ]
 
-function Market({ favorites, cache }) {
+function Market({ favorites, cache, loading }) {
 
     let cardCollection = [];
+    let thing;
 
     choiseDict.forEach(val => {
-        let thing = (
-            <Card width="min-w-1/4" height="min-h-[20vh]">
-                <CryptoContent coinName={val} cache={cache} />
-            </Card>
-        );
+        if (loading) {
+            thing =
+                <Card width="min-w-1/4" height="min-h-[20vh]">
+                    <Skeleton width="100%" height="20vh" />
+                </Card>;
+        } else {
+            thing =
+                <Card width="min-w-1/4" height="min-h-[20vh]">
+                    <CryptoContent coinName={val} cache={cache} />
+                </Card>;
+        }
 
         cardCollection.push(thing);
     });

@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import Skeleton from 'react-loading-skeleton'
 import Header from './components/header'
 import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
 import Favorites from './pages/Favorites'
 import Market from './pages/Market'
 import CoinCache from './modules/cacheModule.mjs'
+import Details from './pages/Details'
+
+import 'react-loading-skeleton/dist/skeleton.css';
 
 function App() {
   const [favorites, setFavorites] = useState([]);
@@ -32,49 +36,46 @@ function App() {
       "hex": "#26A17B"
     },
   });
+  const [loading, setLoading] = useState(true)
+
 
   useEffect(() => {
     async function getCacheData() {
-      setCache(await CoinCache)
+      setCache(await CoinCache);
+      setLoading(false);
     }
 
-    getCacheData()
-  });
+    getCacheData();
+  },[]);
 
   function addFavorite(value) {
     favorites.push(value)
   }
 
-  if (cache === null) {
-    return (
-      <div>
-        Loading... Please wait
-      </div>
-    )
-  } else {
-    return (
-      <BrowserRouter>
-        <div className='w-screen h-screen flex flex-col'>
+  return (
+    <BrowserRouter>
+      <div className='w-screen h-screen flex flex-col'>
           <Header />
-          <div className='flex'>
-            <Sidebar />
+        <div className='flex'>
+          <Sidebar />
             <Routes>
-              <Route
-                path="/" element={<Dashboard favorites={favorites} wallet={wallet} cache={cache} />}
-              />
-              <Route
-                path="/Favorites" element={<Favorites favorites={favorites} cache={cache} />}
-              />
-              <Route
-                path="/Market" element={<Market favorites={favorites} cache={cache} />}
-              />
+                <Route
+                  path="/" element={<Dashboard favorites={favorites} wallet={wallet} cache={cache} loading={loading}/>}
+                />
+                <Route
+                  path="/Favorites" element={<Favorites favorites={favorites} cache={cache} loading={loading}/>}
+                />
+                <Route
+                  path="/Market" element={<Market favorites={favorites} cache={cache} loading={loading}/>}
+                />
+                <Route
+                  path="/Detail/:coin" element={<Details favorites={favorites} cache={cache} loading={loading}/>}
+                />
             </Routes>
-          </div>
         </div>
-      </BrowserRouter>
-    )
-  }
-
+      </div>
+    </BrowserRouter>
+  )
 }
 
 export default App
