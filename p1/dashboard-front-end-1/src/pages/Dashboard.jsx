@@ -153,64 +153,60 @@ const mockData = [
   },
 ];
 
+function say(content) {
+  console.log(content);
+}
+
 function Dashboard({ favorites, wallet, cache }) {
-  const [loadedCoins, setLoadedCoins] = useState([]);
-  const [combData, setCombData] = useState([]);
+  const topthree = []
+  let timelist = [];
 
-  //value is time, price
-  useEffect(() => {
-    let combineddata = [];
-    let dataTopThree = [];
+  for (let thing of Object.keys(wallet)) {
+    if (topthree.length < 3) {
+      if (thing === "ballance") {
 
-    loadedCoins.forEach(coin => {
-      for (let i = 0; i < coin.value.length; i++) {
-        combineddata.push({
-          time: coin["value"][i]["time"],
-          name: coin["name"],
-          value: coin["value"][i]["price"]
-        });
-      }
-    });
-
-    let tmp;
-
-    combineddata.forEach((datePrice) => {
-      if (dataTopThree.length == 0) {
-        tmp = {
-          time: datePrice.time,
-          "coin1": datePrice.value
-        };
-
-        dataTopThree.push(tmp);
       } else {
-        let found = false;
-
-        dataTopThree.forEach(element => {
-          if (element.time == datePrice.time) {
-            found = true;
-            if (element.coin1 != null && element.coin2 == null) {
-              element["coin2"] = datePrice.value;
-            } else if (element.coin1 != null && element.coin2 != null) {
-              element["coin3"] = datePrice.value;
-            }
-          }
+        topthree.push({
+          "name": thing,
+          "value": cache.get(thing)
         });
 
-        if (found == false) {
-          tmp = {
-            time: datePrice.time,
-            "coin1": datePrice.value
-          };
-
-          dataTopThree.push(tmp);
-        } else {
-          found = false;
+        for (let obj of cache.get(thing)) {
+          timelist.push(obj.time);
         }
       }
+    }
+  }
+
+  timelist = new Set(timelist);
+
+  let combData = [];
+
+  const keyone = topthree[0].name
+  const keytwo = topthree[1].name
+  const keythee = topthree[2].name
+
+
+  for (let timestamp of timelist) {
+    let tmpbundle = [];
+
+    topthree.forEach((element) => {
+      element.value.forEach(elm => {
+        if (elm.time == timestamp) {
+          tmpbundle.push({ "name": element.name, "value": elm.price })
+        }
+      });
     });
 
-    setCombData(dataTopThree);
-  }, [loadedCoins]);
+    let tmpdata = {
+      "time": timestamp,
+      [keyone]: tmpbundle[0].value,
+      [keytwo]: tmpbundle[1].value,
+      [keythee]: tmpbundle[2].value
+    }
+
+    combData.push(tmpdata)
+  }
 
   return (
     <div className="max-w-[85vw] min-w-[85vw] h-[90vh]">
@@ -232,25 +228,25 @@ function Dashboard({ favorites, wallet, cache }) {
         </div>
         <div className="flex overflow-x-scroll no-scrollbar">
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="bitcoin" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="bitcoin" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ethereum" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="ethereum" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="tether" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="tether" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="binancecoin" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="binancecoin" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="usd-coin" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="usd-coin" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ripple" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="ripple" cache={cache} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="cardano" cache={cache} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="cardano" cache={cache} />
           </Card>
         </div>
       </div>
@@ -260,9 +256,9 @@ function Dashboard({ favorites, wallet, cache }) {
           <Tooltip />
           <XAxis dataKey="time" />
           <YAxis />
-          <Line type="monotone" dataKey="coin1" stroke="#8884d8" dot={null} />
-          <Line type="monotone" dataKey="coin2" stroke="#8884d8" dot={null} />
-          <Line type="monotone" dataKey="coin3" stroke="#8884d8" dot={null} />
+          <Line type="monotone" dataKey={keyone} stroke="#8884d8" dot={null} />
+          <Line type="monotone" dataKey={keytwo} stroke="#8884d8" dot={null} />
+          <Line type="monotone" dataKey={keythee} stroke="#8884d8" dot={null} />
         </LineChart>
       </div>
     </div>

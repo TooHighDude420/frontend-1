@@ -59,7 +59,7 @@ async function getCoinData(Coin) {
 
     let formatted = data.prices.map(([time, price]) => ({
         name: Coin,
-        time: new Date(time).toLocaleString(),
+        time: new Date(new Date(time).setMinutes(0,0,0)).toLocaleString(),
         price,
     }));
 
