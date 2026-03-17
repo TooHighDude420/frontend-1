@@ -231,27 +231,27 @@ function Dashboard({ favorites, wallet, cache }) {
           </Link>
         </div>
         <div className="flex overflow-x-scroll no-scrollbar">
-          {/* <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="bitcoin" time={5} setLoadedCoins={setLoadedCoins} />
+          <Card width="min-w-[33vw]" height="min-h-[20vh]">
+            <CryptoContent coinName="bitcoin" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ethereum" time={5} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="ethereum" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="tether" time={5} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="tether" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="binancecoin" time={5} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="binancecoin" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="usd-coin" time={5} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="usd-coin" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="ripple" time={5} setLoadedCoins={setLoadedCoins} />
+            <CryptoContent coinName="ripple" cache={cache} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
-            <CryptoContent coinName="cardano" time={5} setLoadedCoins={setLoadedCoins} />
-          </Card> */}
+            <CryptoContent coinName="cardano" cache={cache} setLoadedCoins={setLoadedCoins} />
+          </Card>
         </div>
       </div>
       {/* three most held coins on one graph */}

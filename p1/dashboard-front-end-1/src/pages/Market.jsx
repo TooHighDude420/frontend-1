@@ -31,7 +31,7 @@ function Market({ favorites, cache }) {
     choiseDict.forEach(val => {
         let thing = (
             <Card width="min-w-1/4" height="min-h-[20vh]">
-                <CryptoContent coinName={val} time={5} />
+                <CryptoContent coinName={val} cache={cache} />
             </Card>
         );
 
