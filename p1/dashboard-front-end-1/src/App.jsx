@@ -6,6 +6,8 @@ import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
 import Favorites from './pages/Favorites'
 import Market from './pages/Market'
+import CoinCache from './components/CoinCache'
+import cache from './modules/cacheModule.mjs'
 
 function App() {
   const [favorites, setFavorites] = useState([]);
@@ -37,19 +39,20 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* <CoinCache /> */}
       <div className='w-screen h-screen flex flex-col'>
         <Header />
         <div className='flex'>
           <Sidebar />
           <Routes>
             <Route
-              path="/" element={<Dashboard favorites={favorites} wallet={wallet} />}
+              path="/" element={<Dashboard favorites={favorites} wallet={wallet} cache={cache} />}
             />
             <Route
-              path="/Favorites" element={<Favorites favorites={favorites} />}
+              path="/Favorites" element={<Favorites favorites={favorites} cache={cache}/>}
             />
             <Route
-              path="/Market" element={<Market favorites={favorites} />}
+              path="/Market" element={<Market favorites={favorites} cache={cache}/>}
             />
           </Routes>
         </div>

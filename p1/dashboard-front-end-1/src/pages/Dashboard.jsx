@@ -153,7 +153,7 @@ const mockData = [
   },
 ];
 
-function Dashboard({ favorites, wallet }) {
+function Dashboard({ favorites, wallet, cache }) {
   const [loadedCoins, setLoadedCoins] = useState([]);
   const [combData, setCombData] = useState([]);
 
@@ -231,7 +231,7 @@ function Dashboard({ favorites, wallet }) {
           </Link>
         </div>
         <div className="flex overflow-x-scroll no-scrollbar">
-          <Card width="min-w-[33vw]" height="min-h-[20vh]">
+          {/* <Card width="min-w-[33vw]" height="min-h-[20vh]">
             <CryptoContent coinName="bitcoin" time={5} setLoadedCoins={setLoadedCoins} />
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
@@ -251,7 +251,7 @@ function Dashboard({ favorites, wallet }) {
           </Card>
           <Card width="min-w-[33vw]" height="min-h-[20vh]">
             <CryptoContent coinName="cardano" time={5} setLoadedCoins={setLoadedCoins} />
-          </Card>
+          </Card> */}
         </div>
       </div>
       {/* three most held coins on one graph */}

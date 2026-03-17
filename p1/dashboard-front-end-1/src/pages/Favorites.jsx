@@ -1,4 +1,4 @@
-function Favorites({ favorites }) {
+function Favorites({ favorites, cache }) {
     return (
         <div className="w-[85vw] h-[90vh]">
 

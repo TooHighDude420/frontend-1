@@ -24,19 +24,19 @@ const choiseDict = [
     "vechain"
 ]
 
-function Market({ favorites }) {
+function Market({ favorites, cache }) {
 
     let cardCollection = [];
 
-    // choiseDict.forEach(val => {
-    //     let thing = (
-    //         <Card width="min-w-1/4" height="min-h-[20vh]">
-    //             <CryptoContent coinName={val} time={5} />
-    //         </Card>
-    //     );
+    choiseDict.forEach(val => {
+        let thing = (
+            <Card width="min-w-1/4" height="min-h-[20vh]">
+                <CryptoContent coinName={val} time={5} />
+            </Card>
+        );
 
-    //     cardCollection.push(thing);
-    // });
+        cardCollection.push(thing);
+    });
 
     return (
         <div className="min-w-[85vw] max-h-[90vh] text-white overflow-y-scroll">
