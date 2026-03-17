@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const choiseList = [
     "bitcoin",
     "ethereum",
@@ -51,11 +53,9 @@ const mockData = [
 async function getCoinData(Coin) {
     await new Promise(res => setTimeout(res, 1000));
 
-    let res = await fetch(
+    const { data } = await axios.get(
         `https://api.coingecko.com/api/v3/coins/${Coin}/market_chart?vs_currency=usd&days=5`
     );
-
-    let data = await res.json();
 
     let formatted = data.prices.map(([time, price]) => ({
         name: Coin,
