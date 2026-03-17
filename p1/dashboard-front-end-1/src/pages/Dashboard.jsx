@@ -251,7 +251,9 @@ function Dashboard({ favorites, wallet, cache, loading }) {
               <Skeleton count={1} width="33vw" height="20vh" />
             </Card>
             : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="bitcoin" cache={cache} />
+              <Link to="/Detail/Bitcoin">
+                <CryptoContent coinName="bitcoin" cache={cache} />
+              </Link>
             </Card>
           }
           {loading
