@@ -1,4 +1,4 @@
-function Card({ children, width, height }) {
+function Card({ children, width, height}) {
     let widthCal = `${width} ${height} rounded-xl mx-5 mb-5 bg-gray-800 flex flex-col justify-between`;
 
     return (

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import CryptoContent from "../components/CryptoContent"
 import BallanceContent from "../components/BallanceContent"
 import WalletContent from "../components/WalletContent"
+import registry from "../singleton";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 import { useState, useEffect } from "react"
 import Skeleton from "react-loading-skeleton"
@@ -158,7 +159,7 @@ function say(content) {
   console.log(content);
 }
 
-function Dashboard({ favorites, wallet, cache, loading }) {
+function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
   const [context, setContext] = useState({})
 
   useEffect(() => {
@@ -252,8 +253,14 @@ function Dashboard({ favorites, wallet, cache, loading }) {
             </Card>
             : <Card width="min-w-[33vw]" height="min-h-[20vh]">
               <Link to="/Detail/Bitcoin">
-                <CryptoContent coinName="bitcoin" cache={cache} />
+                <CryptoContent coinName="bitcoin" cache={cache} setFavorites={setFavorites} />
               </Link>
+              <button onClick={registry.getInstance("favorites").addToFavorites("template")}>
+                <p>Favorite</p>
+              </button>
+              <button onClick={console.log(registry.getInstance("favorites").getAllFavorites())}>
+                <p>Favorite</p>
+              </button>
             </Card>
           }
           {loading
@@ -261,7 +268,9 @@ function Dashboard({ favorites, wallet, cache, loading }) {
               <Skeleton count={1} width="33vw" height="20vh" />
             </Card>
             : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="ethereum" cache={cache} />
+              <Link to="/Detail/ethereum">
+                <CryptoContent coinName="ethereum" cache={cache} setFavorites={setFavorites} />
+              </Link>
             </Card>
           }
           {loading
