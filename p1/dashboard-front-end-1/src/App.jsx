@@ -50,6 +50,7 @@ function App() {
       setCache(await CoinCache);
       setLoading(false);
     }
+    
     registry.addInstance("favorites", favman);
     getCacheData();
     console.log(registry.instances);

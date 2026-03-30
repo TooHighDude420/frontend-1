@@ -68,7 +68,7 @@ async function getCoinData(Coin) {
 
 async function fillCashe() {
     let tmpreslist = [];
-
+        
     for (const Coin of choiseList) {
         await getCoinData(Coin).then((formatted) => {
             tmpreslist.push(...formatted);
