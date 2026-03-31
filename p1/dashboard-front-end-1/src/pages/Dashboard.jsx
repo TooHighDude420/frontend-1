@@ -157,13 +157,8 @@ const mockData = [
   },
 ];
 
-const favman = registry.getInstance("favorites");
-
 function handleFav(coin) {
-  if(favman === null){
-    favman = registry.getInstance("favorites");
-  }
-  
+  const favman = registry.getInstance("favorites");
   favman.addToFavorites(coin);
 }
 

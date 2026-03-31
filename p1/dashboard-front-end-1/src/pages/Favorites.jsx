@@ -20,13 +20,15 @@ function Favorites({ favorites, cache }) {
 
     useEffect(() => {
         favlist.forEach(coin => {
-            console.log(coin)
+            console.log(coin);
+            console.log(favlist);
+
             let content =
                 <Card width="min-w-[33vw]" height="min-h-[20vh]">
                     <Link to="/Detail/Bitcoin">
                         <CryptoContent coinName={coin} cache={cache} />
                     </Link>
-                    <button onClick={() => handleFav({ coin })}>
+                    <button onClick={() => handleFav(coin)}>
                         <p>Favorite</p>
                     </button>
                 </Card>;
