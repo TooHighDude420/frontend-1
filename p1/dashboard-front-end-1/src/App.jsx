@@ -8,17 +8,11 @@ import Dashboard from './pages/Dashboard'
 import Favorites from './pages/Favorites'
 import Market from './pages/Market'
 import CoinCache from './modules/cacheManager.mjs'
-import registry from './singleton'
-// import SingletonManager from './modules/singletonManager.mjs'
-import FavoritesManager from './modules/favoritesManager.mjs'
 import Details from './pages/Details'
 
 import 'react-loading-skeleton/dist/skeleton.css';
 
 function App() {
-  const favman = new FavoritesManager();
-  // const singleMan = new SingletonManager();
-
   const [favorites, setFavorites] = useState([]);
   const [cache, setCache] = useState(null);
   const [wallet, setWallet] = useState({
@@ -51,12 +45,8 @@ function App() {
       setLoading(false);
     }
     
-    registry.addInstance("favorites", favman);
     getCacheData();
-    console.log(registry.instances);
   }, []);
-
-  // favman.addToFavorites({"name":"bitcoin"})
 
   return (
     <BrowserRouter>
