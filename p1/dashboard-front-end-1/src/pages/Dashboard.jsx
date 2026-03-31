@@ -1,12 +1,14 @@
-import Card from "../components/Card"
-import { Link } from "react-router-dom"
-import CryptoContent from "../components/CryptoContent"
-import BallanceContent from "../components/BallanceContent"
-import WalletContent from "../components/WalletContent"
+import Card from "../components/Card";
+import { Link } from "react-router-dom";
+import CryptoContent from "../components/CryptoContent";
+import BallanceContent from "../components/BallanceContent";
+import WalletContent from "../components/WalletContent";
 import registry from "../singleton";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
-import { useState, useEffect } from "react"
-import Skeleton from "react-loading-skeleton"
+import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import { choiseDict } from "../components/CryptoContent";
+
 
 const mockData = [
   {
@@ -155,12 +157,23 @@ const mockData = [
   },
 ];
 
+const favman = registry.getInstance("favorites");
+
+function handleFav(coin) {
+  if(favman === null){
+    favman = registry.getInstance("favorites");
+  }
+  
+  favman.addToFavorites(coin);
+}
+
 function say(content) {
   console.log(content);
 }
 
 function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
   const [context, setContext] = useState({})
+  const [marketPrev, setMarketPrev] = useState([])
 
   useEffect(() => {
     if (!cache) return;
@@ -221,6 +234,22 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
       keytwo,
       keythee
     });
+
+    for (let coin of Object.keys(choiseDict)) {
+      let content =
+        <Card width="min-w-[33vw]" height="min-h-[20vh]">
+          <Link to="/Detail/Bitcoin">
+            <CryptoContent coinName={coin} cache={cache} setFavorites={setFavorites} />
+          </Link>
+          <button onClick={() => handleFav(coin)}>
+            <p>Favorite</p>
+          </button>
+        </Card>;
+
+      setMarketPrev(prev => {
+        return [...prev, content]
+      });
+    }
   }, [cache]);
 
   let combData = context.combData;
@@ -251,67 +280,7 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
             ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
               <Skeleton count={1} width="33vw" height="20vh" />
             </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Link to="/Detail/Bitcoin">
-                <CryptoContent coinName="bitcoin" cache={cache} setFavorites={setFavorites} />
-              </Link>
-              <button onClick={registry.getInstance("favorites").addToFavorites("template")}>
-                <p>Favorite</p>
-              </button>
-              <button onClick={console.log(registry.getInstance("favorites").getAllFavorites())}>
-                <p>Favorite</p>
-              </button>
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Link to="/Detail/ethereum">
-                <CryptoContent coinName="ethereum" cache={cache} setFavorites={setFavorites} />
-              </Link>
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="tether" cache={cache} />
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="binancecoin" cache={cache} />
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="usd-coin" cache={cache} />
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="ripple" cache={cache} />
-            </Card>
-          }
-          {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <Skeleton count={1} width="33vw" height="20vh" />
-            </Card>
-            : <Card width="min-w-[33vw]" height="min-h-[20vh]">
-              <CryptoContent coinName="cardano" cache={cache} />
-            </Card>
+            : marketPrev
           }
         </div>
       </div>
