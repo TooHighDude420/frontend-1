@@ -1,15 +1,27 @@
-function Header({activePage}) {
-  return (
-    <>
+import { useLocation } from "react-router-dom"
+
+function Header() {
+    const location = useLocation();
+    let currentLoc = "";
+
+    switch (location.pathname) {
+        case "/":
+            currentLoc = "Dashboard";
+            break;
+
+        default:
+            currentLoc = location.pathname.replace("/", "");
+    }
+    return (
         <div className="w-full h-[10vh]">
             <div className="flex flex-wrap justify-center items-center h-full text-white">
                 <div className="w-1/4">
                     <p className="w-fit">LOGO</p>
                 </div>
                 <div className="w-2/4 ">
-                <div className="flex justify-center items-center">
-                    <p className="w-fit text-lg">{activePage}</p>
-                </div>
+                    <div className="flex justify-center items-center">
+                        <p className="w-fit text-lg">{currentLoc}</p>
+                    </div>
                 </div>
                 <div className="w-1/4 justify-center">
                     <div className="flex gap-x-2 items-center w-[40%] justify-self-end">
@@ -21,8 +33,7 @@ function Header({activePage}) {
                 </div>
             </div>
         </div>
-    </>
-  )
+    )
 }
 
 export default Header
