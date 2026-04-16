@@ -72,7 +72,8 @@ async function fillCashe() {
     for (const Coin of choiseList) {
         await getCoinData(Coin).then((formatted) => {
             tmpreslist.push(...formatted);
-        }).catch(() => {
+        }).catch((error) => {
+            console.log(error.response)
             console.log(`${Coin} could not be fetched`);
             mockData.forEach(mock => {
                 tmpreslist.push({

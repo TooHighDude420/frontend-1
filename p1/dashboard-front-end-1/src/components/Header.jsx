@@ -10,7 +10,8 @@ function Header() {
             break;
 
         default:
-            currentLoc = location.pathname.replace("/", "");
+            currentLoc = location.pathname.replace("Detail/", "");
+            currentLoc = currentLoc.replace("/", "");
     }
     return (
         <div className="w-full h-[10vh]">

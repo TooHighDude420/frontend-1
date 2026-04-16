@@ -35,27 +35,29 @@ function Market({ favorites, cache, loading }) {
 
     return (
         <div className="min-w-[85vw] max-h-[90vh] text-white overflow-y-scroll">
-            <input type="text" onChange={() => {
+            <input type="text" className="bg-white text-white" onChange={() => {
                 let search = document.getElementById("search").value;
 
                 setDisplayList(filterList(search));
             }} id="search" />
             <div className="grid grid-cols-4">
-                {displayList.map((val, index) => {
-                    if (loading) {
-                        return (
-                            <Card width="min-w-1/4" height="min-h-[20vh]">
-                                <Skeleton width="100%" height="20vh" />
-                            </Card>
-                        );
-                    } else {
-                        return (
-                            <Card width="min-w-1/4" height="min-h-[20vh]">
-                                <CryptoContent coinName={val} cache={cache} />
-                            </Card>
-                        );
-                    }
-                })}
+                {
+                    displayList.map((val, index) => {
+                        if (loading) {
+                            return (
+                                <Card width="min-w-1/4" height="min-h-[20vh]">
+                                    <Skeleton width="100%" height="20vh" />
+                                </Card>
+                            );
+                        } else {
+                            return (
+                                <Card width="min-w-1/4" height="min-h-[20vh]">
+                                    <CryptoContent coinName={val} cache={cache} />
+                                </Card>
+                            );
+                        }
+                    })
+                }
             </div>
         </div>
     )

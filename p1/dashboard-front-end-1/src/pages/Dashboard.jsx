@@ -233,7 +233,7 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
     for (let coin of Object.keys(choiseDict)) {
       let content =
         <Card width="min-w-[33vw]" height="min-h-[20vh]">
-          <Link to="/Detail/Bitcoin">
+          <Link to={"/Detail/" + coin}>
             <CryptoContent coinName={coin} cache={cache} setFavorites={setFavorites} />
           </Link>
           <button onClick={() => handleFav(coin)}>
