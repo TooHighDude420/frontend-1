@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import { Link } from "react-router-dom";
 import CryptoContent from "../components/CryptoContent";
 
-function Favorites({ favorites, cache }) {
+function Favorites({ cache }) {
     const favoMan = registry.getInstance("favorites");
     const [favs, setFavorites] = useState([
         ...favoMan.getAllFavorites()
@@ -21,14 +21,17 @@ function Favorites({ favorites, cache }) {
         <div className="w-[85vw] h-[90vh]">
             {
                 favs.map((fav, index) => {
-                    return <Card width="min-w-[33vw]" height="min-h-[20vh]">
-                        <Link to={`/Detail/${fav}`}>
-                            <CryptoContent coinName={fav} cache={cache} />
-                        </Link>
-                        <button onClick={() => handleFav(fav)}>
-                            <p>Favorite</p>
-                        </button>
-                    </Card>
+                    amountOfCards++;
+                    return (
+                        <Card width="min-w-[33vw]" height="min-h-[20vh]">
+                            <Link to={`/Detail/${fav}`}>
+                                <CryptoContent coinName={fav} cache={cache} />
+                            </Link>
+                            <button onClick={() => handleFav(fav)}>
+                                <p>Favorite</p>
+                            </button>
+                        </Card>
+                    )
                 })
             }
         </div>

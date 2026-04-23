@@ -182,9 +182,7 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
 
     for (let thing of Object.keys(wallet)) {
       if (topthree.length < 3) {
-        if (thing === "ballance") {
-
-        } else {
+        if (thing !== "ballance") {
           topthree.push({
             "name": thing,
             "value": cache.get(thing)
@@ -195,6 +193,9 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
           }
         }
       }
+      else {
+        break;
+      }
     }
 
     timelist = new Set(timelist);
@@ -203,24 +204,56 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
     keytwo = topthree[1].name
     keythee = topthree[2].name
 
-    for (let timestamp of timelist) {
-      let tmpbundle = [];
+    let smallest = null;
 
-      topthree.forEach((element) => {
-        element.value.forEach(elm => {
-          if (elm.time == timestamp) {
-            tmpbundle.push({ "name": element.name, "value": elm.price })
-          }
-        });
-      });
-
-      let tmpdata = {
-        "time": timestamp,
-        [keyone]: tmpbundle[0].value,
-        [keytwo]: tmpbundle[1].value,
-        [keythee]: tmpbundle[2].value
+    topthree.forEach(elm => {
+      if (smallest != null) {
+        if (elm.value.length < smallest.value.length) {
+          smallest = elm;
+        }
+      } else {
+        smallest = elm;
       }
-      combData.push(tmpdata)
+    });
+
+    if (smallest.value.length > 30) {
+      smallest = null;
+    }
+
+    if (smallest) {
+      let smalindex = topthree.indexOf(smallest);
+
+      for (let i = 0; i < topthree.length; i++) {
+        if (i != smalindex) {
+          topthree[smalindex] = topthree[i];
+          break;
+        }
+      }
+    }
+
+    try {
+      for (let timestamp of timelist) {
+        let tmpbundle = [];
+
+        topthree.forEach((element) => {
+          element.value.forEach(elm => {
+            if (elm.time == timestamp) {
+              tmpbundle.push({ "name": element.name, "value": elm.price })
+            }
+          });
+        });
+
+        let tmpdata = {
+          "time": timestamp,
+          [keyone]: tmpbundle[0].value,
+          [keytwo]: tmpbundle[1].value,
+          [keythee]: tmpbundle[2].value
+        }
+
+        combData.push(tmpdata)
+      }
+    } catch {
+
     }
 
     setContext({
@@ -229,22 +262,6 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
       keytwo,
       keythee
     });
-
-    for (let coin of Object.keys(choiseDict)) {
-      let content =
-        <Card width="min-w-[33vw]" height="min-h-[20vh]">
-          <Link to={"/Detail/" + coin}>
-            <CryptoContent coinName={coin} cache={cache} setFavorites={setFavorites} />
-          </Link>
-          <button onClick={() => handleFav(coin)}>
-            <p>Favorite</p>
-          </button>
-        </Card>;
-
-      setMarketPrev(prev => {
-        return [...prev, content]
-      });
-    }
   }, [cache]);
 
   let combData = context.combData;
@@ -272,10 +289,22 @@ function Dashboard({ favorites, wallet, cache, loading, setFavorites }) {
         </div>
         <div className="flex overflow-x-scroll no-scrollbar">
           {loading
-            ? <Card width="min-w-[33vw]" height="min-h-[20vh]">
+            ?
+            <Card width="min-w-[33vw]" height="min-h-[20vh]">
               <Skeleton count={1} width="33vw" height="20vh" />
             </Card>
-            : marketPrev
+            : Object.keys(choiseDict).map((coin, index) => {
+              return (
+                <Card width="min-w-[33vw]" height="min-h-[20vh]">
+                  <Link to={"/Detail/" + coin}>
+                    <CryptoContent coinName={coin} cache={cache} setFavorites={setFavorites} />
+                  </Link>
+                  <button onClick={() => handleFav(coin)}>
+                    <p>Favorite</p>
+                  </button>
+                </Card>
+              )
+            })
           }
         </div>
       </div>
