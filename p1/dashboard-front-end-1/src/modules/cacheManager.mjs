@@ -59,7 +59,7 @@ async function getCoinData(Coin) {
 
     let formatted = data.prices.map(([time, price]) => ({
         name: Coin,
-        time: new Date(new Date(time).setMinutes(0,0,0)).toLocaleString(),
+        time: new Date(new Date(time).setMinutes(0, 0, 0)).toLocaleString(),
         price,
     }));
 
@@ -68,18 +68,35 @@ async function getCoinData(Coin) {
 
 async function fillCashe() {
     let tmpreslist = [];
-        
+
+    // api call
     for (const Coin of choiseList) {
-        await getCoinData(Coin).then((formatted) => {
+        try {
+            let formatted = await getCoinData(Coin);
             tmpreslist.push(...formatted);
-        }).catch(() => {
+
+            if (formatted.length < 10){
+                throw new Error("data not fully fetched");
+            }
+
+            let index = choiseList.indexOf(Coin);
+            choiseList.splice(index, 1);
+
+            console.log(`${Coin} fetched`);
+        } catch {
             console.log(`${Coin} could not be fetched`);
-            mockData.forEach(mock => {
-                tmpreslist.push({
-                    "name": Coin,
-                    "time": mock.time,
-                    "price": mock.price
-                });
+            break;
+        }
+    }
+
+    // after first error, fallback to mockdata
+    for (const coin of choiseList) {
+        console.log(`using mockdata for ${coin}`);
+        mockData.forEach(mock => {
+            tmpreslist.push({
+                "name": coin,
+                "time": mock.time,
+                "price": mock.price
             });
         });
     }
@@ -89,6 +106,7 @@ async function fillCashe() {
 
 async function finalMap() {
     let lastlist = await fillCashe();
+
     let casheMap = new Map();
 
     lastlist.forEach(test => {

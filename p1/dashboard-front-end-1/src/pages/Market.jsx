@@ -1,6 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import Card from "../components/Card"
 import CryptoContent from "../components/CryptoContent";
+import { useState } from "react";
 
 const choiseDict = [
     "bitcoin",
@@ -25,31 +26,38 @@ const choiseDict = [
     "vechain"
 ]
 
+function filterList(querry) {
+    return choiseDict.filter((item) => item.toLowerCase().includes(querry.toLowerCase()))
+}
+
 function Market({ favorites, cache, loading }) {
-
-    let cardCollection = [];
-    let thing;
-
-    choiseDict.forEach(val => {
-        if (loading) {
-            thing =
-                <Card width="min-w-1/4" height="min-h-[20vh]">
-                    <Skeleton width="100%" height="20vh" />
-                </Card>;
-        } else {
-            thing =
-                <Card width="min-w-1/4" height="min-h-[20vh]">
-                    <CryptoContent coinName={val} cache={cache} />
-                </Card>;
-        }
-
-        cardCollection.push(thing);
-    });
+    const [displayList, setDisplayList] = useState(choiseDict);
 
     return (
         <div className="min-w-[85vw] max-h-[90vh] text-white overflow-y-scroll">
+            <input type="text" className="bg-white text-white" onChange={() => {
+                let search = document.getElementById("search").value;
+
+                setDisplayList(filterList(search));
+            }} id="search" />
             <div className="grid grid-cols-4">
-                {cardCollection}
+                {
+                    displayList.map((val, index) => {
+                        if (loading) {
+                            return (
+                                <Card width="min-w-1/4" height="min-h-[20vh]">
+                                    <Skeleton width="100%" height="20vh" />
+                                </Card>
+                            );
+                        } else {
+                            return (
+                                <Card width="min-w-1/4" height="min-h-[20vh]">
+                                    <CryptoContent coinName={val} cache={cache} />
+                                </Card>
+                            );
+                        }
+                    })
+                }
             </div>
         </div>
     )
