@@ -78,11 +78,9 @@ it('test search function', () => {
     const user = userEvent.setup();
 
     render(<Market cache={casheMap} loading={false} favorites={[]} />);
-    screen.debug();
 
     const textbox = screen.getByRole('textbox');
     user.type(textbox, 'bit');
-    screen.debug();
 
     expect(screen.getByText('Bitcoin')).toBeInTheDocument();
 });
